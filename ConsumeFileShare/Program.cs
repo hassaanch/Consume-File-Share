@@ -45,7 +45,6 @@ namespace ConsumeFileShare
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine($@"Opps! Something went wrong.
 Error: {ex.Message}");
             }    
@@ -56,13 +55,11 @@ Error: {ex.Message}");
             // Parse the connection string and return a reference to the storage account.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting(connectionString));
 
-
             // Create a CloudFileClient object for credentialed access to Azure Files.
             CloudFileClient fileClient = storageAccount.CreateCloudFileClient();
 
             // Get a reference to the file share we created previously.
-            return fileClient.GetShareReference(fileShareName);
-      
+            return fileClient.GetShareReference(fileShareName);  
         }
 
         private static CloudFileShare CheckFileShareExistance(CloudFileShare share)
@@ -80,42 +77,28 @@ Error: {ex.Message}");
             CloudFileDirectory sampleDir = rootDir.GetDirectoryReference(referenceDirectory);
 
             // Ensure that the directory exists.
-
             return sampleDir.Exists() ? sampleDir : throw new Exception("Directory not exist");
         }
 
         public static CloudFile CheckFileExistance(CloudFileDirectory cloudDirRef, string referencePath, string fileName)
-        {
-
-            
+        {       
           // Get a reference to the file we created previously.
             CloudFile cloudFile = cloudDirRef.GetFileReference(fileName);
 
             // Ensure that the file exists.
-            if (cloudFile.Exists())
-            {
-                var di = new DirectoryInfo(referencePath);
-                if (!di.Exists)
-                {
-                    di.Create();
-                }
+            if (!cloudFile.Exists()) throw new Exception("File not exist");
+            
+                var directory = new DirectoryInfo(referencePath);
+                if (!directory.Exists) directory.Create();
                 return cloudFile;
-
-
-            }
-            else
-            {
-                throw new Exception("File not exist");
-            }
         }
 
         public static void SaveFileFromFileShare(CloudFile cloudFile, string localPath,string localDirectory,string localFile)
         {
             string path = Path.Combine(localPath, localFile);
 
-            using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
+            using (var outputFileStream = new FileStream(path, FileMode.Create))
             {
-
                 cloudFile.DownloadToStream(outputFileStream);
                 Console.WriteLine($@"File Has been saved at {localPath}
 Directory: {localDirectory}
