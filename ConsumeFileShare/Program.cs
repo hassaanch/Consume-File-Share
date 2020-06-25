@@ -20,6 +20,8 @@ namespace ConsumeFileShare
         /// _referenceFile is the file to download
         /// _fileShareName is the name of file share service
         /// _connectionString is define in App.config 
+        /// _referenceDirectory is the directory containing the file
+        /// _localPath is the path where the file needs to save
         /// </summary>
         private static readonly string _referenceDirectory = "NameOftTheDirectoryInTheCloud";
         private static readonly string _referenceFile = "NameOftTheFileInTheCloud";
@@ -96,7 +98,6 @@ Error: {ex.Message}");
         public static void SaveFileFromFileShare(CloudFile cloudFile, string localPath,string localDirectory,string localFile)
         {
             string path = Path.Combine(localPath, localFile);
-
             using (var outputFileStream = new FileStream(path, FileMode.Create))
             {
                 cloudFile.DownloadToStream(outputFileStream);
@@ -104,8 +105,6 @@ Error: {ex.Message}");
 Directory: {localDirectory}
 FileName: {localFile} ");
             }
-
-
         }
 
         public static void Main(string[] args)

@@ -12,3 +12,5 @@ In program.cs file you need to assign values to variable like
 - _referenceFile is the file to download from fileshare
 - _fileShareName is the name of file share service
 - _connectionString is define in App.config 
+- _referenceDirectory is the directory containing the file
+- _localPath is the path where the file needs to save ie: $@"customDirectory\{_referenceDirectory}"
